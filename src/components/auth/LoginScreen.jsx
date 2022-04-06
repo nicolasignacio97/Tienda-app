@@ -9,8 +9,12 @@ import { styles } from '../custom/Styles'
 import { Link } from 'react-router-dom'
 import { useForm } from '../../hooks/useForms';
 import validator from 'validator';
+import { useDispatch } from 'react-redux';
+import { startLogin } from '../../actions/auth';
 
 export const LoginScreen = () => {
+
+  const dispatch = useDispatch();
   const [FormValue, handleInputChange, setValues] = useForm({
     email: 'nico@gmail.com',
     Password: '123456',
@@ -83,7 +87,7 @@ export const LoginScreen = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validarFormulario()) {
-      console.log(FormValue);
+     dispatch(startLogin(email, Password))
     }
     return;
   }
@@ -149,7 +153,7 @@ export const LoginScreen = () => {
               Iniciar
             </Button>
             <Typography variant="body1" color="initial">
-              ¿No tienes cuenta? <Link to='/registro'>Registrate Aquí</Link>
+              ¿No tienes cuenta? <Link to='/auth/registro'>Registrate Aquí</Link>
             </Typography>
           </Grid>
         </form>

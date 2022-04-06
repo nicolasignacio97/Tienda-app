@@ -1,35 +1,29 @@
 import React, { useEffect, useState } from 'react'
-import { Container, Paper, Typography, Grid, TextField, Button } from '@mui/material'
+import { Container, Paper, Typography, Grid, TextField, Button, Alert } from '@mui/material'
 import { styles } from '../custom/Styles'
 import { Link } from 'react-router-dom'
 import { useForm } from '../../hooks/useForms'
 
 import validator from 'validator';
+import { useDispatch } from 'react-redux'
+import { starRegister } from '../../actions/auth'
 
 export const RegisterScreen = () => {
+
+  const dispatch = useDispatch();
   const [FormValue, handleInputChange] = useForm({
-    nombre: 'Nicolas',
-    email: 'nicolas@gmail.com',
+    nombre: 'nicolas',
+    email: 'nico@gmail.com',
     Password: '123456',
     Password2: '123456',
   });
-  const [Validar, setValidar] = useState({
-    nombre: false,
-    msgnombre: '',
-    email: false,
-    msgemail: '',
-    Password: false,
-    msgpassword: '',
-    Password2: false,
-    msgpassword2: '',
-  })
+  const [Validar, setValidar] = useState({})
 
   const { nombre, email, Password, Password2 } = FormValue;
 
   const validarFormulario = () => {
-    if (nombre.length === 0) {
+    if (nombre.length <= 0) {
       setValidar({
-        ...Validar,
         nombre: true,
         msgnombre: 'El nombre es obligatorio'
       })
@@ -37,7 +31,6 @@ export const RegisterScreen = () => {
     }
     if (validator.isEmpty(email)) {
       setValidar({
-        ...Validar,
         email: true,
         msgemail: 'El email es obligatorio'
       })
@@ -45,7 +38,6 @@ export const RegisterScreen = () => {
     }
     if (!validator.isEmail(email)) {
       setValidar({
-        ...Validar,
         email: true,
         msgemail: 'El email no es valido'
       })
@@ -53,7 +45,6 @@ export const RegisterScreen = () => {
     }
     if (Password.length < 6) {
       setValidar({
-        ...Validar,
         Password: true,
         msgpassword: 'La contraseña debe tener al menos 6 caracteres'
       })
@@ -61,7 +52,6 @@ export const RegisterScreen = () => {
     }
     if (validator.isEmpty(Password2)) {
       setValidar({
-        ...Validar,
         Password2: true,
         msgpassword2: 'Confirmar la contraseña es obligatorio'
       })
@@ -69,7 +59,6 @@ export const RegisterScreen = () => {
     }
     if (Password !== Password2) {
       setValidar({
-        ...Validar,
         Password2: true,
         msgpassword2: 'Las contraseñas no coinciden'
       })
@@ -81,44 +70,46 @@ export const RegisterScreen = () => {
   useEffect(() => {
     if (nombre.length > 0) {
       setValidar({
-        ...Validar,
         nombre: false,
         msgnombre: ''
       })
     }
-    if (email.length > 0 && validator.isEmail(email)) {
+    if (email.length > 0) {
       setValidar({
-        ...Validar,
+        email: false,
+        msgemail: ''
+      })
+    }
+    if (validator.isEmail(email)) {
+      setValidar({
         email: false,
         msgemail: ''
       })
     }
     if (Password.length >= 6) {
       setValidar({
-        ...Validar,
         Password: false,
         msgpassword: ''
       })
     }
     if (Password2.length > 0) {
       setValidar({
-        ...Validar,
         Password2: false,
         msgpassword2: ''
       })
     }
-
   }, [nombre, email, Password, Password2])
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validarFormulario()) {
-      console.log(FormValue)
+      dispatch(starRegister(email, Password, nombre))
     }
   }
 
   return (
-    <Container maxWidth='sm'className='animate__animated animate__fadeInRight'
+    <Container maxWidth='sm' className='animate__animated animate__fadeInRight'
       sx={{
         height: '35rem',
         margin: ' 100px auto'
@@ -181,7 +172,7 @@ export const RegisterScreen = () => {
               Registrar
             </Button>
             <Typography variant="body1" color="initial">
-              ¿Ya tienes una cuenta? <Link to='/login'>Iniciar Sesión</Link>
+              ¿Ya tienes una cuenta? <Link to='/auth/login'>Iniciar Sesión</Link>
             </Typography>
           </Grid>
         </form>
