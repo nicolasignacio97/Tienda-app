@@ -11,7 +11,8 @@ export const startLogin = (email, password) => {
             localStorage.setItem('Token-init-date', new Date().getTime());
             dispath(login({
                 uid: body.uid,
-                name: body.name
+                name: body.name,
+                role: body.role
             }))
         } else {
             Swal.fire('Error', body.msg, 'error')
@@ -36,6 +37,7 @@ export const starRegister = (email, password, name) => {
             dispath(login({
                 uid: body.uid,
                 name: body.name,
+                role: body.role
             }))
         } else {
             Swal.fire('Error', body.msg, 'error')
@@ -53,6 +55,7 @@ export const startChecking = () => {
             dispath(login({
                 uid: body.uid,
                 name: body.name,
+                role: body.role
             }))
         } else {
             dispath(ChekingFinish())

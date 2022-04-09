@@ -16,7 +16,6 @@ export const fetchSinToken = (endpoint, data, method = 'GET') => {
 }
 
 export const fetchConToken = (endpoint, data, method = 'GET') => {
-    
     const url = `${baseUrl}/${endpoint}`;
     const token = localStorage.getItem('Token') || ''
     if (method === 'GET') {
